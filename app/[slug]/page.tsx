@@ -4,6 +4,7 @@ import { eq, asc } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { Link2, ExternalLink } from "lucide-react";
+import { FaviconImg } from "@/components/favicon-img";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
@@ -58,14 +59,7 @@ export default async function PublicProfile({ params }: { params: Promise<{ slug
                 rel="noopener noreferrer"
                 className="group flex items-center gap-4 rounded-2xl border border-zinc-200 bg-white px-5 py-4 shadow-sm transition-all hover:scale-[1.02] hover:shadow-md active:scale-[0.98] dark:border-zinc-800 dark:bg-zinc-900 dark:hover:bg-zinc-800"
               >
-                <img
-                  src={`https://www.google.com/s2/favicons?domain=${hostname}&sz=64`}
-                  alt=""
-                  className="size-8 rounded-lg"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).style.display = "none";
-                  }}
-                />
+                <FaviconImg hostname={hostname} />
                 <div className="flex-1 min-w-0">
                   <p className="font-medium text-zinc-900 dark:text-zinc-50 truncate">
                     {l.title}
