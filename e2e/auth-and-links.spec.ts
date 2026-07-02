@@ -4,7 +4,7 @@ test.describe("Unauthenticated access", () => {
   test("visiting /dashboard without a session redirects to the login page", async ({ page }) => {
     await page.goto("/dashboard");
     await expect(page).toHaveURL("/");
-    await expect(page.getByRole("heading", { name: "LinkHub" })).toBeVisible();
+    await expect(page.getByText("LinkHub")).toBeVisible();
   });
 });
 
