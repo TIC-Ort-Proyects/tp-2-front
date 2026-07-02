@@ -3,8 +3,10 @@ import { profile, link } from "@/lib/db/schema";
 import { eq, asc } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Link2, ExternalLink } from "lucide-react";
 import { FaviconImg } from "@/components/favicon-img";
+import { getHostname } from "@/lib/profile";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
@@ -48,8 +50,7 @@ export default async function PublicProfile({ params }: { params: Promise<{ slug
         {/* Links */}
         <div className="space-y-3">
           {links.map((l) => {
-            let hostname = "";
-            try { hostname = new URL(l.url).hostname; } catch {}
+            const hostname = getHostname(l.url);
 
             return (
               <a
@@ -83,7 +84,7 @@ export default async function PublicProfile({ params }: { params: Promise<{ slug
 
         {/* Footer */}
         <div className="mt-12 text-center">
-          <a
+          <Link
             href="/"
             className="inline-flex items-center gap-1.5 text-xs text-zinc-400 transition-colors hover:text-zinc-600 dark:hover:text-zinc-300"
           >
@@ -91,7 +92,7 @@ export default async function PublicProfile({ params }: { params: Promise<{ slug
               <Link2 className="size-2.5 text-white dark:text-zinc-900" />
             </div>
             LinkHub
-          </a>
+          </Link>
         </div>
       </div>
     </div>
