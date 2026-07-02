@@ -6,6 +6,7 @@ import { profile, link } from "@/lib/db/schema";
 import { eq, and, asc } from "drizzle-orm";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
+import { generateProfileSlug, sanitizeSlug } from "@/lib/profile";
 
 async function getUser() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -19,10 +20,7 @@ async function getOrCreateProfile(userId: string, name: string) {
   });
   if (existing) return existing;
 
-  const slug = name
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "") + "-" + Math.random().toString(36).slice(2, 6);
+  const slug = generateProfileSlug(name);
 
   const [created] = await db
     .insert(profile)
@@ -44,7 +42,7 @@ export async function getProfileWithLinks() {
 
 export async function updateProfile(formData: FormData) {
   const user = await getUser();
-  const slug = (formData.get("slug") as string).toLowerCase().replace(/[^a-z0-9-]/g, "");
+  const slug = sanitizeSlug(formData.get("slug") as string);
   const displayName = formData.get("displayName") as string;
   const bio = (formData.get("bio") as string) || null;
 

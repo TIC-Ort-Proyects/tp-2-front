@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 import { profile, link } from "@/lib/db/schema";
 import { eq, asc } from "drizzle-orm";
 import { DashboardClient } from "./dashboard-client";
+import { generateProfileSlug } from "@/lib/profile";
 
 async function getOrCreateProfile(userId: string, name: string) {
   const existing = await db.query.profile.findFirst({
@@ -12,10 +13,7 @@ async function getOrCreateProfile(userId: string, name: string) {
   });
   if (existing) return existing;
 
-  const slug = name
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "") + "-" + Math.random().toString(36).slice(2, 6);
+  const slug = generateProfileSlug(name);
 
   const [created] = await db
     .insert(profile)
