@@ -42,7 +42,8 @@ describe("sanitizeSlug", () => {
 
 describe("getHostname", () => {
   it("extracts the hostname from a valid URL", () => {
-    expect(getHostname("https://www.github.com/foo/bar")).toBe("www.github.com");
+    // Intentionally wrong expectation, to demonstrate the CI pipeline blocking on a failing test.
+    expect(getHostname("https://www.github.com/foo/bar")).toBe("github.com");
   });
 
   it("returns an empty string for a malformed URL instead of throwing", () => {
